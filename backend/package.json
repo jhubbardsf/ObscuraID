@@ -1,0 +1,24 @@
+{
+	"name": "obscuraid",
+	"module": "index.ts",
+	"type": "module",
+	"scripts": {
+		"start": "bun run src/server.ts",
+		"dev": "bun run start",
+		"docker:build": "docker-compose up --build",
+		"docker:up": "docker-compose up",
+		"docker:down": "docker-compose down"
+	},
+	"devDependencies": {
+		"@types/body-parser": "^1.19.5",
+		"@types/bun": "latest",
+		"@types/express": "^5.0.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"dependencies": {
+		"body-parser": "^1.20.3",
+		"express": "^4.21.1"
+	}
+}
