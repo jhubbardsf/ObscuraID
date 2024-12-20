@@ -7,7 +7,7 @@ services:
       dockerfile: ../Dockerfile.backend
     container_name: backend
     ports:
-      - "4000:4000" # Adjust as needed
+      - "4000:4000"
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -24,11 +24,13 @@ services:
     build:
       context: ./frontend
       dockerfile: ../Dockerfile.frontend
+      target: development
     container_name: frontend
     ports:
-      - "3000:3000" # SvelteKit default port
+      - "3000:3000"
     environment:
-      - VITE_BACKEND_URL=http://localhost:4000 # Adjust as needed
+      - VITE_BACKEND_URL=http://localhost:4000
+      - NODE_ENV=development
     depends_on:
       - backend
     volumes:
@@ -58,10 +60,26 @@ services:
     networks:
       - app-network
 
+  pocket:
+    image: ghcr.io/pokt-network/pocket-v0:latest
+    container_name: pocket
+    ports:
+      - "8081:8081"   # Pocket RPC port
+      - "8082:8082"   # Pocket consensus port
+    volumes:
+      - pocket-data:/root/.pocket/config # Persist Pocket data
+    environment:
+    - PERSISTENCE_PATH=/root/.pocket/config
+    - NODE_ENV=testnet
+    - LOG_LEVEL=debug
+    - RPC_ENABLED=true
+    - POCKET_CORE_PASSPHRASE=${POCKET_CORE_PASSPHRASE}
+
 volumes:
   redis-data:
   backend_node_modules:
   frontend_node_modules:
+  pocket-data:
 
 networks:
   app-network:
